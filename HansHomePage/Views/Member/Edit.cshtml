@@ -1,0 +1,117 @@
+﻿@using HansHomePage.Models;
+
+@model HansHomePage.Models.Members
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_TestLayoutPage.cshtml";
+}
+
+<!-- Container -->
+<div class="content-wrap">
+    <div id="feedback" class="inner-content">
+        <section id="page-title" class="inner-section">
+            <div class="container-fluid nopadding wow fadeInRight" data-wow-delay="0.4s" data-wow-offset="10">
+                <h2 class="font-accident-two-normal uppercase">회원정보수정</h2>
+                <h5 class="font-accident-one-bold hovercolor uppercase">회원정보는 개인정보처리방침에 따라 안전하게 보호되며, 회원님의 명백한 동의 없이 공개 또는 제 3자에게 제공되지 않습니다.</h5>
+            </div>
+        </section>
+        <!-- MemberEdit Block -->
+        <section class="inner-section feedback feedback-light">
+            <div class="container-fluid nopadding">
+                <div class="row">
+                    <div class="col-md-2">&nbsp;</div>
+                    <div class="col-md-8 e-centered wow fadeInDown" data-wow-delay="0.6s" data-wow-offset="10">
+                        <div class="dividewhite2"></div>
+                        <div id="form-messages"></div>
+
+
+                        <form method="post" action="@Url.Action("Edit", "Member")" class="wpcf7-form">
+
+                            <div class="field">
+                                <div class="row">
+                                    <div class="col-md-6">@Html.TextBoxFor(m => m.MemberID, new { placeholder = "아이디를 입력하세요.", @readonly = "readonly" })</div>
+                                    @*<div class="col-md-2"><button type="button" onclick="return fnDoubleCheck();" class="btn btn-lg btn-lgr-str">중복검사</button></div>*@
+                                </div>
+                            </div>
+
+                            <div class="field">
+                                @Html.TextBoxFor(m => m.MemberName, new { placeholder = "이름을 입력하세요." })
+                            </div>
+
+                            <div class="field">
+                                @Html.TextBoxFor(m => m.MemberPWD, new { placeholder = "비밀번호를 입력하세요." })
+                            </div>
+                            <div class="field">
+                                @Html.TextBoxFor(m => m.Email, new { placeholder = "메일을 입력하세요." })
+                            </div>
+                            <div class="field">
+                                @Html.TextBoxFor(m => m.Telephone, new { placeholder = "전화번호를 입력하세요." })
+                            </div>
+                            <div class="dividewhite2"></div>
+                            <div class="field text-center">
+                                <button type="submit" id="btnSave" onclick="return fnSaveCheck();" class="btn btn-lg btn-lgr-str">수정하기</button>
+                                <button type="button" onclick="return fnDeleteConfirm();" class="btn btn-lg btn-danger btn-lgr-str">삭제하기</button>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="col-md-2">&nbsp;</div>
+                    <div class="col-md-12 divider-dynamic"></div>
+                </div>
+            </div>
+            <div class="dividewhite6"></div>
+        </section>
+        <!-- /MemberEdit Block -->
+     
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var result = '@ViewBag.Result';
+            if (result == 'OK') {
+                alert("정상적으로 수정되었습니다.");
+            }
+
+            if (result == 'FAIL') {
+                alert("수정작업을 실패하였습니다.");
+            }
+        });
+
+        //저장 유효성검사
+        function fnSaveCheck() {
+
+            if ($("#MemberID").val() == "") {
+                alert("아이디를 입력해주십시오.")
+                $("#MemberID").focus();
+                return false;
+            }
+
+            if ($("#MemberName").val() == "") {
+                alert("성명을 입력해주십시오.")
+                $("#MemberName").focus();
+                return false;
+            }
+            if ($("#MemberPWD").val() == "") {
+                alert("암호를 입력해주십시오.")
+                $("#MemberPWD").focus();
+                return false;
+            }
+
+            return true;
+        }
+
+        //삭제확인
+        function fnDeleteConfirm() {
+
+            if (confirm("삭제하시겠습니까?") == true) {
+                window.location.href = "/Member/Delete?memberId=" + $("#MemberID").val();
+            } else {
+                return false;
+            }
+        }
+
+    </script>
+}

@@ -1,0 +1,167 @@
+﻿@using HansHomePage.Models;
+
+@model HansHomePage.Models.Members
+
+
+@{
+    ViewBag.Title = "Entry";
+    Layout = "~/Views/Shared/_TestLayoutPage.cshtml";
+
+    Response.Write(ViewBag.Result);
+}
+
+<!-- Container -->
+<div class="content-wrap">
+    <div id="feedback" class="inner-content">
+        <section id="page-title" class="inner-section">
+            <div class="container-fluid nopadding wow fadeInRight" data-wow-delay="0.4s" data-wow-offset="10">
+                <h2 class="font-accident-two-normal uppercase">회원가입</h2>
+                <h5 class="font-accident-one-bold hovercolor uppercase">회원이 되시면 회원님만의 유익한 정보를 만날수 있습니다.</h5>
+            </div>
+        </section>
+        <!-- Member Block -->
+        <section class="inner-section feedback feedback-light">
+            <div class="container-fluid nopadding">
+                <div class="row">
+                    <div class="col-md-2">&nbsp;</div>
+                    <div class="col-md-8 e-centered wow fadeInDown" data-wow-delay="0.6s" data-wow-offset="10">
+                        <div class="dividewhite2"></div>
+                        <div id="form-messages"></div>
+                        <form method="post" id="frm" action="@Url.Action("Entry", "Member")" class="wpcf7-form">
+                            <div class="field">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(m => m.MemberID, new { placeholder = "아이디를 입력하세요." })
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" onclick="return fnDoubleCheck();"
+                                                class="btn btn-lg btn-lgr btn-lgr-str">
+                                            중복검사
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                @Html.TextBoxFor(m => m.MemberName, new { placeholder = "이름을 입력하세요." })
+                            </div>
+                            <div class="field">
+                                @Html.PasswordFor(m => m.MemberPWD, new { placeholder = "비밀번호를 입력하세요." })
+                            </div>
+                            <div class="field">
+                                <input type="password" id="pwCheck" placeholder="개인정보보호를 위해 비밀번호를 다시 한 번 입력해주세요." />
+                            </div>
+                            <div class="field">
+                                @Html.TextBoxFor(m => m.Email, new { placeholder = "메일을 입력하세요." })
+                            </div>
+                            <div class="field">
+                                @Html.TextBoxFor(m => m.Telephone, new { placeholder = "전화번호를 입력하세요." })
+                            </div>
+                            <div class="dividewhite2"></div>
+                            <div class="field text-center">
+                                <input type="button" id="btnSave" onclick="return fnSaveCheck();" class="btn btn-lg btn-lgr btn-lgr-str" style="width:110px" value="회원 가입" />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-2">&nbsp;</div>
+                    <div class="col-md-12 divider-dynamic"></div>
+                </div>
+            </div>
+            <div class="dividewhite6"></div>
+        </section>
+        <!-- /Member Block -->
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        var checked = false;       
+
+        $(document).ready(function () {
+            var result = '@ViewBag.Result';
+            if (result == 'OK') {
+                alert("정상적으로 저장되었습니다.");
+            }
+            if (result == 'FAIL') {
+                alert("저장작업을 실패하였습니다.");
+            }
+        });
+
+        function fnSaveCheck() {
+            var flag = true;
+            if ($("#MemberID").val() == "") {
+                alert("아이디를 입력해주십시오.")
+                $("#MemberID").focus();
+                flag = false;
+                return false;
+            }
+
+            if (!checked) {
+                alert("아이디 중복검사를 해주십시오.");
+                return false;
+            }
+
+            if ($("#MemberName").val() == "") {
+                alert("이름을 입력해주십시오.")
+                $("#MemberName").focus();
+                return false;
+            }
+            if ($("#MemberPWD").val() == "") {
+                alert("비밀번호를 입력해주십시오.")
+                $("#MemberPWD").focus();
+                return false;
+            }
+
+            if ($("#pwCheck").val() == "") {
+                alert("개인정보보호를 위해 비밀번호를 다시 한 번 입력해주십시오.")
+                $("#pwCheck").focus();
+                return false;
+            }
+
+            if ($("#MemberPWD").val() != $("#pwCheck").val()) {
+                alert("입력하신 비밀번호가 일치하지 않습니다. 비밀번호를 확인해주세요.")
+                return false;
+            }
+
+            $("#frm").submit();
+        }
+
+        //아이디 중복 검사
+        function fnDoubleCheck() {
+            if ($("#MemberID").val() == "") {
+                alert("아이디를 입력해주십시오.")
+                $("#MemberID").focus();
+                return false;
+            }
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: '/Member/IDCheck?memberId=' + $("#MemberID").val(),
+                data: "{}",
+                dataType: "json"
+            })
+            .done(function (response) {
+                if (response == "OK") {
+                    alert("사용 가능 아이디입니다.");
+                    $("#btnSave").removeAttr("disabled");
+                    checked = true;
+                } else {
+                    alert("중복 아이디가 존재합니다.");
+                    $('#MemberID').val('');
+                    $('#MemberID').focus();
+                    $("#btnSave").attr("disabled", true);
+                    checked = false;
+                }
+            })
+            .fail(function (data) {
+                if (data.responseText !== '') {
+                    alert(data.responseText);
+                } else {
+                    alert("에러가 발생했습니다");
+                }
+            });
+        }
+
+    </script>
+}
+

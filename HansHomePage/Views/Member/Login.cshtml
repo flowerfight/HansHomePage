@@ -1,0 +1,97 @@
+﻿@using HansHomePage.Models;
+
+@model HansHomePage.Models.Members
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_TestLayoutPage.cshtml";
+}
+
+<!-- Container -->
+<div class="content-wrap">
+    <div id="feedback" class="inner-content">
+        <section id="page-title" class="inner-section">
+            <div class="container-fluid nopadding wow fadeInRight" data-wow-delay="0.4s" data-wow-offset="10">
+                <h2 class="font-accident-two-normal uppercase">로그인</h2>
+            </div>
+        </section>
+        <!-- Login Block -->
+        <section class="inner-section feedback feedback-light">
+            <div class="container-fluid nopadding">
+                <div class="row">
+                    <div class="col-md-2">&nbsp;</div>
+                    <div class="col-md-8 e-centered wow fadeInDown" data-wow-delay="0.6s" data-wow-offset="10">
+                        <div class="dividewhite2"></div>
+                        <div id="form-messages"></div>
+
+                        <form method="post" id="frm" action="@Url.Action("Login", "Member")" class="wpcf7-form">
+
+                            <div class="field">
+                                <div class="row" style="text-align:center">
+                                    <div class="col-md-8">@Html.TextBoxFor(m => m.MemberID, new { placeholder = "아이디를 입력하세요." })</div>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="row" style="text-align:center">
+                                    <div class="col-md-8">@Html.PasswordFor(m => m.MemberPWD, new { placeholder = "비밀번호를 입력하세요." })</div>
+                                </div>
+                            </div>
+                            <div class="field text-center">
+                                <button type="button" onclick="return sendLogin();" class="btn btn-lg btn-lgr-str" style="align-self:left">로그인</button>
+                                <a href="/Member/Entry" class="btn btn-lg btn-lgr-str">회원가입</a>
+                                <a href="#" class="btn btn-lg btn-lgr-str">아이디 찾기</a>
+                                <a href="#" class="btn btn-lg btn-lgr-str">비밀번호 찾기</a>
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="col-md-2">&nbsp;</div>
+                    <div class="col-md-12 divider-dynamic"></div>
+                </div>
+            </div>
+            <div class="dividewhite6"></div>
+        </section>
+        <!-- /Login Block -->
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function sendLogin() {
+
+            if ($("#MemberID").val() == "") {
+                alert("아이디를 입력해주십시오.")
+                $("#MemberID").focus();
+                return false;
+            }
+            if ($("#MemberPWD").val() == "") {
+                alert("비밀번호를 입력해주십시오.")
+                $("#MemberPWD").focus();
+                return false;
+            }
+            $.ajax({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                url: '/Member/PWDCheck?memberId=' + $("#MemberID").val() + "&memberPWD=" + $("#MemberPWD").val(),
+                data: "{}",
+                dataType: "json"
+            })
+                .done(function (response) {
+                    if (response == "OK") {
+                        $("#frm").submit();
+                    } else {
+                        alert("아이디 또는 비밀번호가 다릅니다. ");
+                        $("#btnSave").removeAttr("disabled");
+                        checked = true;
+                    }
+                })
+                .fail(function (data) {
+                    if (data.responseText !== '') {
+                        alert(data.responseText);
+                    } else {
+                        alert("에러가 발생했습니다");
+                    }
+                });
+        }
+    </script>
+}

@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<!--[if IE 9]>
+<html class="ie9" lang="en">    <![endif]-->
+<!--[if IE 8]>
+<html class="ie8" lang="en">    <![endif]-->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <title>@ViewBag.Title</title>
+    <meta name="description" content="Gridus vCard HTML Template is the professional responsive personal website template, based on the latest Bootstrap 3">
+    <meta name="keywords" content="html5, template, website, responsive, bootstrap">
+    <meta name="author" content="neuethemes">
+    <!-- CSS -->
+    @Styles.Render("~/hanshome/css")
+    <style>
+
+        #preloader {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 99999;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+            background: #666666 url("assets/custom/images/preloader.gif") no-repeat center center;
+        }
+    </style>
+</head>
+<body class="boxed">
+    <!--Pre-Loader-->
+    <div id="preloader"></div>
+    <header>
+        <section id="top-navigation" class="container-fluid nopadding">
+            <div class="row nopadding ident e-bg-light-texture">
+                <!-- Photo -->
+                <a href="/Test/Index">
+                    <div class="col-md-5 col-lg-4 vc-photo">&nbsp;</div>
+                </a>
+                <!-- /Photo -->
+                <div class="col-md-7 col-lg-8 vc-name nopadding">
+                    <!-- Name-Position -->
+                    <div class="row nopadding name">
+                        <div class="col-md-10 name-title"><h2 class="font-accident-two-light uppercase">Hans</h2><h4 style="text-align:right"></h4></div>
+
+                        @{ if ((string)Session["ID"] == null)
+                            {
+                                <div class="col-md-2 nopadding name-pdf">
+                                    <a href="/Member/Login" class="hvr-sweep-to-right"><i class="flaticon-circle-1" title="Login"></i><span>로그인</span></a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-2 nopadding name-pdf">
+                                    <a href="/Member/Logout" class="hvr-sweep-to-right"><i class="flaticon-circle-1" title="Login"></i><span>로그아웃</span></a>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <div class="row nopadding position">
+                        <div class="col-md-10 position-title">
+                            <section class="cd-intro">
+                                <h4 class="cd-headline clip is-full-width font-accident-two-normal uppercase">
+                                    <span>The Specialist </span>
+                                    <span class="cd-words-wrapper">
+                                        <b class="is-visible">GowIT</b>
+                                        <b>New Recruit</b>
+                                        <b>Kim HanSu</b>
+                                    </span>
+                                </h4>
+                            </section>
+                        </div>
+                        <div class="col-md-2 nopadding pdf">
+                            <a href="#" class="hvr-sweep-to-right"><i class="flaticon-download149" title="My Portfolio Dwonload"></i></a>
+                        </div>
+                    </div>
+                    <!-- /Name-Position -->
+                    <!-- Main Navigation -->
+                    <ul id="nav" class="row nopadding cd-side-navigation">
+                        <li class="col-xs-4 col-sm-2 nopadding menuitem green">
+                            <a href="/Test/Index" class="hvr-sweep-to-bottom"><i class="flaticon-insignia" title="Home"></i><span>Home</span></a>
+                        </li>
+                        <li class="col-xs-4 col-sm-2 nopadding menuitem blue">
+                            <a href="/Board/ArticleList" class="hvr-sweep-to-bottom"><i class="flaticon-pens15" title="Board"></i><span>게시판</span></a>
+                        </li>
+                        <li class="col-xs-4 col-sm-2 nopadding menuitem cyan">
+                            <a href="/Test/Portfolio" class="hvr-sweep-to-bottom"><i class="flaticon-book-bag2" title="Portfolio"></i><span>포트폴리오</span></a>
+                        </li>
+                        <li class="col-xs-4 col-sm-2 nopadding menuitem orange">
+                            <a href="#" class="hvr-sweep-to-bottom"><i class="flaticon-identification28" title="Certificate"></i><span>자격증</span></a>
+                        </li>
+                        <li class="col-xs-4 col-sm-2 nopadding menuitem red">
+                            <a href="/Member/Entry" class="hvr-sweep-to-bottom"><i class="flaticon-profile5" title="Join Membership"></i><span>회원가입</span></a>
+                        </li>
+                        @if ((string)Session["ID"] == "admin")
+                        {
+                            <li class="col-xs-4 col-sm-2 nopadding menuitem yellow">
+                                <a href="/Member/List" class="hvr-sweep-to-bottom"><i class="flaticon-tool-1" title="Member Management"></i><span>회원관리</span></a>
+                            </li>
+                        }
+
+                    </ul>
+                    <!-- /Main Navigation -->
+                </div>
+            </div>
+        </section>
+    </header>
+
+    <!-- Container -->
+    @RenderBody()
+
+    <footer class="padding-50 e-bg-light-texture">
+        <div class="container-fluid nopadding">
+            <div class="row wow fadeInDown" data-wow-delay=".2s" data-wow-offset="10">
+                <div class="col-md-3">
+                    <h4 class="font-accident-two-normal uppercase">HanSu Kim</h4>
+                    <p class="inline-block">
+                        C#, JAVA, Android, Unit Test, Entity Framework, Unity.
+                    </p>
+                    <div class="divider-dynamic"></div>
+                </div>
+                <div class="col-md-3 cv-link">
+                    <h4 class="font-accident-two-normal uppercase">Download cv</h4>
+                    <div class="dividewhite1"></div>
+                    <a href="#!">English</a>
+                    <a href="#!">German</a>
+                    <a href="#!">Spanish</a>
+                    <div class="divider-dynamic"></div>
+                </div>
+                <div class="col-md-3">
+                    <h4 class="font-accident-two-normal uppercase">Subscribe</h4>
+                    <div class="dividewhite1"></div>
+                    <input>
+                    <!--<p>Lorem ipsum dolor sit amet...</p>-->
+                    <div class="divider-dynamic"></div>
+                </div>
+                <div class="col-md-3">
+                    <h4 class="font-accident-two-normal uppercase">Follow me at</h4>
+                    <div class="inline-block"><a href="https://www.google.com/" target="_blank"><i class="flaticon-google111" title="Google"></i></a></div>
+                    <div class="inline-block"><a href="https://www.youtube.com/" target="_blank"><i class="flaticon-youtube33" title="YouTube"></i></a></div>
+                    <div class="inline-block"><a href="https://www.instagram.com/" target="_blank"><i class="flaticon-instagram14" title="Instagram"></i></a></div>
+                    <div class="inline-block"><a href="https://ko-kr.facebook.com/" target="_blank"><i class="flaticon-facebook45" title="Facebook"></i></a></div>
+                    <div class="inline-block"><a href="https://twitter.com/" target="_blank"><i class="flaticon-twitter39" title="Twitter"></i></a></div>
+                    <div class="inline-block"><a href="https://www.pinterest.co.kr/" target="_blank"><i class="flaticon-pinterest28" title="Pinterest"></i></a></div>
+                    <div class="divider-dynamic"></div>
+                </div>
+            </div>
+            <div class="dividewhite1"></div>
+            <div class="row wow fadeInDown" data-wow-delay=".4s" data-wow-offset="10">
+                <div class="col-md-12 copyrights">
+                    <p>© 2018 HanSu Kim.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div id="image-cache" class="hidden"></div>
+    <!-- JS -->
+    @Scripts.Render("~/hanshome/js")
+        <script src="https://maps.google.com/map/api/js" type="text/javascript"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "BootDemo1";
+    Layout = "~/Views/Shared/_TestLayoutPage.cshtml";
+}
+
+<div class="content-wrap">
+    <h3>3단 컬럼 그리드1</h3>
+    <p>
+        동일 가로쪽의 3단 컬럼구성하기
+        <strong>데스크톱 해상도에서 작동되며 데스크톱 이상 해상도에서는 자동으로 증가합니다.</strong>
+        모바일과 태블릿해상도에서는 자동으로줄바꿈이 발생하여 하단으로 이동하며 해당로우를 100 차지합니다.
+    </p>
+
+    <div class="row">
+        <div class="col-md-4">.col-md-4</div>
+        <div class="col-md-4">.col-md-4</div>
+        <div class="col-md-4">.col-md-4</div>
+    </div>
+
+    <div class="row nopadding">
+        <div class="col-md-4" style="height:100px;background:red;">.col-md-4</div>
+        <div class="col-md-4" style="height:100px;background:green;">.col-md-4</div>
+        <div class="col-md-4" style="height:100px;background:blue;">.col-md-4</div>
+    </div>
+
+</div>

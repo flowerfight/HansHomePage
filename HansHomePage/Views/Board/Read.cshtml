@@ -1,0 +1,187 @@
+﻿@using HansHomePage.Models;
+
+@model HansHomePage.Models.ArticleEditViewModel
+
+@{
+    ViewBag.Title = "Read";
+    Layout = "~/Views/Shared/_TestLayoutPage.cshtml";
+}
+
+<div id="blogpost" class="inner-content">
+    <section id="page-title" class="inner-section">
+        <div class="container-fluid nopadding cd-words-wrapper fadeInRight" data-wow-delay="0.4s"
+             data-wow-offset="10" style="height:40px;">
+            <h2 class="font-accident-two-normal uppercase">게시글</h2>
+        </div>
+    </section>
+
+    <section class="inner-section">
+        <div class="container-fluid nopadding">
+            <div class="wow fadeInDown" data-wow-delay="0.6s" data-wow-offset="10">
+                <a href="/Board/Create" class="btn btn-lg btn-lgr-str">글쓰기</a>
+                <div class="dividewhite2"></div>
+
+                <form id="formdata" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>
+                                <label>번호</label>&nbsp;@Model.Articles.ArticleIDX&emsp;&emsp;
+                                <label>제목</label>&nbsp;@Model.Articles.Title&emsp;&emsp;
+                                <label>분류</label>&nbsp;@Model.Articles.ArticleType
+                                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                                &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                                &emsp;&emsp;&emsp;&emsp;&emsp;
+                                <label>글쓴이</label>&nbsp;@Model.Articles.RegistUserName&emsp;&emsp;
+                                <label>조회수</label>&nbsp;@Model.Articles.ViewCnt&emsp;&emsp;
+                                <label>생성날짜</label>&nbsp;@Model.Articles.RegistDate
+                            </p>
+                        </div>
+                        <div class="col-md-12">
+                            <p>
+                                <label>내용</label>
+                                @Html.TextAreaFor(m => m.Articles.Contents, new {
+                               @rows = "10", @cols = "80", @readonly = "readonly" })
+                                @Html.HiddenFor(m => m.Articles.ArticleIDX)
+                            </p>
+                        </div>
+                        <div class="col-md-12">
+                            @foreach (var file in Model.Files)
+                            {
+                                <a href="@file.FilePath@file.FileName" download>@file.FileName</a>
+                            }
+                        </div>
+                    </div>
+                    <p>
+                        @if ((string)Session["ID"] == "admin" || Model.Articles.RegistUserName 
+                            == (string)Session["ID"])
+                        {
+                            <button type="button" id="btnDelete" onclick="return fnDeleteCheck();"
+                                    class="btn btn-lg btn-lgr-str pull-right">
+                                삭제하기
+                            </button>
+                            <a href="/Board/Edit?aidx=@Model.Articles.ArticleIDX" 
+                               class="btn btn-lg btn-lgr-str pull-right">수정하기</a>
+                        }
+                        <a href="/Board/ArticleList" class="btn btn-lg btn-lgr-str pull-right">목록이동</a>
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>&nbsp;</p>
+                    <p>
+                        <label>댓글</label>
+                        <textarea id="comments" rows="5" cols="40" 
+                                  placeholder="댓글을 입력해주세요."></textarea>
+                    </p>
+                    <button type="button" class="btn btn-lg btn-lgr-str pull-right addComment">
+                        댓글 등록
+                    </button>
+                    <p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p>
+                    <div class="row  pad-top">
+                        <div class="col-md-12">
+                            <ul class="media-list" id="comments_">
+                                <table class="footable table table-striped toggle-arrow-tiny" data-page-size="10">
+                                    <tbody>
+                                        @if (Model != null)
+                                        {
+                                            foreach (ArticleComments articleComments in Model.Comments)
+                                            {
+                                                <tr>
+                                                    <td style="word-break:break-all;">
+                                                        <li class="media">                                                
+                                                            @*<a class="pull-left" href="#">
+                                                                    <img class="media-object img-circle" src="assets/img/user.gif" />
+                                    		                    </a>*@
+                                                            <div class="media-body">
+                                                                <h4 class="media-heading"></h4>
+                                                                <p>
+                                                                    @articleComments.Comments
+                                                                </p>
+                                                            </div>
+                                                        </li>
+                                                    </td>
+                                                        <td width="25%">
+                                                            @articleComments.MemberID&emsp;&emsp;
+                                                            @articleComments.RegistDate
+                                                            <p></p>
+                                                            <p>
+                                                                @if ((string)Session["ID"] == "admin" || (string)Session["ID"]
+                                                                    == Model.Articles.RegistUserName)
+                                                                {
+                                                                    <button type="button" onclick="return fnCommentsDeleteCheck(@articleComments.CommentsIDX);"
+                                                                           class="btn- btn-lgr pull-right">
+                                                                        삭제
+                                                                    </button>
+                                                                    <button type="button" class="btn- btn-lgr pull-right">
+                                                                        수정
+                                                                    </button>
+                                                                }
+                                                            </p>
+
+                                                        </td>
+                                                    <td hidden>
+                                                        @articleComments.ChildCommentsIDX
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="6" style="text-align:center;">
+                                                <ul class="pagination"></ul>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+
+            // 댓글 달기
+            $('.addComment').on('click', function () {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("Comments", "Board")',
+                    data: { ArticleIDX: @Model.Articles.ArticleIDX, Comments: $("#comments").val() },
+                    dataType: 'json',
+
+                    success: function (data) {
+                        alert(data)
+                    }
+                });
+            });
+        })
+
+        function fnCommentsDeleteCheck(cidx) {
+            if (confirm("댓글을 삭제하시겠습니까?") == true) {
+                window.location.href = "/Board/CommentsDelete?cidx=" + cidx;
+                alert("댓글이 정상적으로 삭제되었습니다.")
+            } else {
+                return false;
+            }
+        }
+
+        function fnDeleteCheck() {
+            if (confirm("게시글을 삭제하시겠습니까?") == true) {
+                window.location.href = "/Board/ArticleDelete?aidx=" + $("#Articles_ArticleIDX").val();
+                alert("게시글이 정상적으로 삭제되었습니다.")
+            } else {
+                return false;
+            }
+        }
+
+        $(document).ready(function () {
+            $('.footable').footable();
+        });
+
+    </script>
+}

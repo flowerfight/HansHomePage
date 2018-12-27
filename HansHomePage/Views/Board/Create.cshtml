@@ -1,0 +1,103 @@
+﻿@using HansHomePage.Models;
+
+@model HansHomePage.Models.Articles
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_TestLayoutPage.cshtml";
+}
+
+<div id="blogpost" class="inner-content">
+    <section id="page-title" class="inner-section">
+        <div class="container-fluid nopadding cd-words-wrapper fadeInRight" data-wow-delay="0.4s"
+             data-wow-offset="10" style="height:40px;">
+            <h2 class="font-accident-two-normal uppercase">관리자모드</h2>
+        </div>
+    </section>
+
+    <section class="inner-section">
+        <div class="container-fluid nopadding">
+            <div class="wow fadeInDown" data-wow-delay="0.6s" data-wow-offset="10">
+                <div id="post-comment">
+                    <h4 class="font-accident-one-light uppercase">게시글 쓰기</h4>
+                </div>
+                <div class="dividewhite2"></div>
+
+                <form id="formdata" action="@Url.Action("Create", "Board")" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p>
+                                <label>제목</label>
+                                @Html.TextBoxFor(m => m.Title, new { placeholder = "제목을 입력하세요." })
+                            </p>
+                        </div>
+                        <div class="col-md-12">
+                            <label>분류</label>
+                        </div>
+                        <div class="col-md-12">
+                            <p>
+                                @Html.DropDownListFor(m => m.ArticleType, new SelectList(new List<Object>{
+                                new { value = "", text = "선택" },
+                                new { value = "C#", text = "C#" },
+                                new { value = "JAVA", text = "JAVA" },
+                                new { value = "C++", text = "C++" } }, "value", "text", Model.ArticleType),
+                                new { style = "width:200px;height:30px;font-size:medium;" })
+                            </p>
+                        </div>
+                        <div class="col-md-12">
+                            <p><label>글 내용</label>@Html.TextAreaFor(m => m.Contents, new { placeholder = "내용을" +
+                                                 " 입력하세요.", @rows = "10", @cols = "80" })
+                            </p>
+                        </div>
+
+                        <div class="col-md-12">
+                            <p><label>첨부</label><input type="file" name="file" id="file" style="border:hidden;" /></p>
+                        </div>
+                    </div>
+                    <div class="dividewhite2"></div>
+                    <p>
+                        <button type="submit" id="btnSave" onclick="return fnSaveCheck();" class="btn btn-lg
+                                btn-lgr-str">등록하기</button>
+                        <a href="/Board/ArticleList" class="btn btn-lg btn-lgr-str">목록이동</a>
+                    </p>
+                </form>
+            </div>
+
+        </div>
+        <div class="dividewhite8"></div>
+    </section>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var result = '@ViewBag.Result';
+            if (result == 'OK') {
+                alert("정상적으로 저장되었습니다.");
+            }
+            if (result == 'FAIL') {
+                alert("저장작업을 실패하였습니다.");
+            }
+        });
+
+        function fnSaveCheck() {
+            if ($("#Title").val() == "") {
+                alert("제목을 입력해주십시오.")
+                $("#Title").focus();
+                return false;
+            }
+            if ($("#ArticleType").val() == "") {
+                alert("분류 정보를 선택해주십시오.")
+                $("#ArticleType").focus();
+                return false;
+            }
+            if ($("#Contents").val() == "") {
+                alert("내용을 입력해주십시오.")
+                $("#Contents").focus();
+                return false;
+            }
+            return true;
+        }
+    </script>
+}
